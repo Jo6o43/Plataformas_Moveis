@@ -1,2 +1,2 @@
-# Calculator-App-
+# Calculator-App
 Its a calculator.
