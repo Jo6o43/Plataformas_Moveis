@@ -43,7 +43,6 @@ fun CalculatorApp(modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .weight(1f)
-                .aspectRatio(5f)
         )
         {
             CalcButton(modifier = Modifier.weight(1f), label = "C", true, onClick = {displayText = "0" })
@@ -54,7 +53,6 @@ fun CalculatorApp(modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .weight(1f)
-                .aspectRatio(5f)
         )
         {
             CalcButton(modifier = Modifier.weight(1f), label = "7", onClick = onNumPressed)
@@ -65,7 +63,6 @@ fun CalculatorApp(modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .weight(1f)
-                .aspectRatio(5f)
         )
         {
             CalcButton(modifier = Modifier.weight(1f), label = "4",  onClick = onNumPressed)
@@ -76,7 +73,6 @@ fun CalculatorApp(modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .weight(1f)
-                .aspectRatio(5f)
         )
         {
             CalcButton(modifier = Modifier.weight(1f), label = "1",  onClick = onNumPressed)
@@ -87,7 +83,6 @@ fun CalculatorApp(modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .weight(1f)
-                .aspectRatio(5f)
         )
         {
             CalcButton(modifier = Modifier.weight(1f), label = "+/-", true, onClick = { /*TODO*/ })
