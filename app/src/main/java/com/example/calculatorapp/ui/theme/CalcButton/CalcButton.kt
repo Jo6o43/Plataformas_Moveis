@@ -51,7 +51,7 @@ fun CalcButton(
 fun CalcButtonPreview() {
     CalculatorAppTheme() {
         CalcButton(
-            label = "7"
+            label = "2"
         )
     }
 }
