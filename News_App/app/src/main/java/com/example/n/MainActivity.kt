@@ -16,7 +16,9 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,12 +34,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.n.theme.TopNewsTheme
 import com.example.n.ui.ArticleDetail
+//import com.example.n.ui.BottomNavigationBar
 import com.example.n.ui.HomeView
+import com.example.n.ui.ProfileScreen
+import com.example.n.ui.SearchScreen
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +69,7 @@ class MainActivity : ComponentActivity() {
                                     Icon(Icons.Filled.Home, contentDescription = "Home")
                                 }
                             }
+
                         )
                     },
                     bottomBar = {
@@ -77,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
 
                                 IconButton(
-                                    onClick = { /*todo*/ },
+                                    onClick = {Screen.Search.route},
                                     modifier = Modifier.weight(1f)
                                 ) {
                                     Icon(
@@ -149,6 +156,12 @@ class MainActivity : ComponentActivity() {
                                 url = url ?: ""
                             )
                         }
+                        composable(route = Screen.Search.route) {
+                            SearchScreen()
+                        }
+                        composable(route = Screen.Profile.route) {
+                            ProfileScreen()
+                        }
                     }
 
                 }
@@ -157,8 +170,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-sealed class Screen(val route: String) {
+sealed class Screen(val route: String,) {
     object Home : Screen("home")
     object ArticleDetail : Screen("article_Detail/{articleUrl}")
-
+    object Search : Screen("search")
+    object Profile : Screen("profile")
 }
+
