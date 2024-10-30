@@ -1,12 +1,16 @@
 package com.example.spacegame
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 
 
 @Composable
 fun GameScreenView () {
+
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp

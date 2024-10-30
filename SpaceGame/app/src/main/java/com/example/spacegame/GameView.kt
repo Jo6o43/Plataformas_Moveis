@@ -6,10 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.compose.runtime.remember
 
 
 class GameView : SurfaceView,Runnable {
@@ -26,9 +28,15 @@ class GameView : SurfaceView,Runnable {
     lateinit var player : Player
     lateinit var boom : Boom
 
+    val musicPlayer = MediaPlayer.create(context, R.raw.background_song)
+   private lateinit var boomSoundPlayer: BoomSoundPlayer
+
     private fun init(context: Context, width: Int, height: Int){
         surfaceHolder = holder
         paint = Paint()
+
+        boomSoundPlayer = BoomSoundPlayer(context)
+
         for (i in 0..100){
             stars.add(Star(width, height))
         }
@@ -38,6 +46,8 @@ class GameView : SurfaceView,Runnable {
             enemies.add(Enemy(context, width, height))
         }
         boom = Boom(context, width, height)
+
+
     }
 
     constructor(context: Context?, width: Int, height: Int) : super(context) { init(context!!, width, height) }
@@ -48,11 +58,15 @@ class GameView : SurfaceView,Runnable {
         playing=true
         gameThread = Thread(this)
         gameThread?.start()
+
+        musicPlayer.start()
+        musicPlayer.setLooping(true)
     }
     fun pause() {
         playing = false
         gameThread?.join()
-
+        musicPlayer.pause()
+        boomSoundPlayer.release()
     }
     override fun run(){
         while(playing){
@@ -74,6 +88,8 @@ class GameView : SurfaceView,Runnable {
         for (e in enemies){
             e.update(player.speed)
             if ( Rect.intersects(player.detectCollision, e.detectCollision) ){
+                boomSoundPlayer.playSound()
+
                 boom.x = e.x
                 boom.y = e.y
 
@@ -123,3 +139,4 @@ class GameView : SurfaceView,Runnable {
         return true
     }
 }
+
