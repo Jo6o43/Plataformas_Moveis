@@ -31,6 +31,7 @@ fun GameHomeView(
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
                     onGlobalTouch(offset.y)
+                    onGlobalTouch(offset.x)
                 }
             }
     ) {

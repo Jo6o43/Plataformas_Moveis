@@ -88,7 +88,6 @@ class GameView : SurfaceView,Runnable {
     }
 
     fun update() {
-
         boom.x = -300
         boom.y = -300
 
@@ -107,7 +106,6 @@ class GameView : SurfaceView,Runnable {
                 e.x = -300
             }
         }
-
     }
 
     fun draw() {
@@ -144,8 +142,10 @@ class GameView : SurfaceView,Runnable {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                 val touchY = event.y
                 player.updatePosition(touchY)
+                player.boosting = true
             }
             MotionEvent.ACTION_UP -> {
+                player.boosting = false
             }
         }
         return true

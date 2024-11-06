@@ -16,6 +16,10 @@ class Player(context: Context, width: Int, height: Int) {
     var min_y = 0
 
     var bitmap: Bitmap
+    var boosting = false
+
+    private val MAX_SPEED = 20
+    private val MIN_SPEED = 1
 
     var detectCollision = Rect()
 
@@ -37,6 +41,11 @@ class Player(context: Context, width: Int, height: Int) {
     }
 
     fun update() {
+        if (boosting) speed += 2
+        else speed -= 5
+        if (speed > MAX_SPEED) speed = MAX_SPEED
+        if (speed < MIN_SPEED) speed = MIN_SPEED
+
         detectCollision.left = x
         detectCollision.top = y
         detectCollision.right = x + bitmap.width
