@@ -19,12 +19,6 @@ class Enemy {
 
     var bitmap: Bitmap
 
-    var boosting = false
-
-    private val GRAVITY = -10
-    private val MAX_SPEED = 20
-    private val MIN_SPEED = 1
-
     var detectCollision = Rect()
 
 

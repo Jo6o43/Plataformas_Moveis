@@ -23,6 +23,9 @@ class Player(context: Context, width: Int, height: Int) {
 
     var detectCollision = Rect()
 
+    var health = 5
+    var killCount = 0
+
     init {
         bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.player)
 
@@ -56,4 +59,10 @@ class Player(context: Context, width: Int, height: Int) {
         y = newY.toInt().coerceIn(min_y, max_y)
         update()
     }
+
+    fun shootBullet(context: Context): Bullet {
+        // Cria uma nova instância de Bullet na posição do jogador
+        return Bullet(context, x + bitmap.width, y + bitmap.height / 2)
+    }
+
 }
