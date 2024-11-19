@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:40453403238:android:d4d3251155e4b42b1c73a7",
+        "mobilesdk_app_id": "1:40453403238:android:506d600a81f9eae31c73a7",
         "android_client_info": {
-          "package_name": "idk.pt"
+          "package_name": "com.example.shoppinglist"
         }
       },
       "oauth_client": [],
