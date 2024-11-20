@@ -9,6 +9,8 @@ import com.google.firebase.firestore.firestore
 
 data class AddListState(
     val name : String = "",
+    val quantity : Int = 1,
+    val check : Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null
 )
@@ -22,6 +24,16 @@ class AddListViewModel : ViewModel(){
         state.value = state.value.copy(name = name)
     }
 
+    fun onQuantityChange(input: String) {
+        val quantity = input.toIntOrNull() ?: 0
+        state.value = state.value.copy(quantity = quantity)
+    }
+
+    fun onCheckChange(check: Boolean) {
+        state.value = state.value.copy(check = check)
+    }
+
+
     fun addList(){
 
         val db = Firebase.firestore
@@ -33,6 +45,8 @@ class AddListViewModel : ViewModel(){
         val listItems = ListItems(
             "",
             state.value.name,
+            state.value.quantity,
+            state.value.check,
             arrayListOf(userId?:"")
         )
 
@@ -45,5 +59,4 @@ class AddListViewModel : ViewModel(){
                 Log.w(TAG, "Error adding document", e)
             }
     }
-
 }

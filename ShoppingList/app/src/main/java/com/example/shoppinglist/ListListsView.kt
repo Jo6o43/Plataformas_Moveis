@@ -2,7 +2,9 @@ package com.example.shoppinglist
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,15 +12,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,25 +40,49 @@ import com.example.shoppinglist.ui.theme.ShoppingListTheme
 fun ListListsView(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController()
-){
+) {
 
-    val viewModel : ListListsViewModel = viewModel()
+    val viewModel: ListListsViewModel = viewModel()
     val state = viewModel.state.value
+    var checked by remember { mutableStateOf(false) }
 
 
-    Box(modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
 
         LazyColumn(modifier = modifier.fillMaxSize()) {
             itemsIndexed(
                 items = state.listItemsList
-            ){  index, item ->
-
-                Text(
-                    modifier = Modifier.fillMaxWidth()
+            ) { index, item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(16.dp),
-                    text = item.name?:"")
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = item.name ?: "Sem Nome",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                    )
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = item.quantity?.toString() ?: "1",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        textAlign = TextAlign.End,
+                    )
+                    Checkbox(
+                        modifier = Modifier.weight(1f),
+                        checked = item.check?:false,
+                        onCheckedChange = {/*fazer com que mude o "check" na firebase*/  }
+                    )
 
+                }
             }
         }
 
@@ -70,7 +104,7 @@ fun ListListsView(
         }
     }
 
-    LaunchedEffect (key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getLists()
     }
 
@@ -78,7 +112,7 @@ fun ListListsView(
 
 @Preview(showBackground = true)
 @Composable
-fun ListListViewPreview(){
+fun ListListViewPreview() {
     ShoppingListTheme {
         ListListsView()
     }
