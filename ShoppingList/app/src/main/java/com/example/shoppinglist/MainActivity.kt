@@ -14,6 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.example.shoppinglist.lists.AddListView
+import com.example.shoppinglist.lists.ListListsView
+import com.example.shoppinglist.lists.items.ListItemsView
+import com.example.shoppinglist.login.LoginView
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 const val TAG = "ShoppingList"
@@ -24,6 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ShoppingListTheme {
+
                 var navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
@@ -47,6 +52,13 @@ class MainActivity : ComponentActivity() {
                         composable (Screen.AddList.route){
                             AddListView(navController = navController)
                         }
+                        composable(Screen.ListItems.route) {
+                            val listId = it.arguments?.getString("listId")
+                            ListItemsView(
+                                modifier = Modifier.padding(innerPadding),
+                                listId = listId ?: ""
+                            )
+                        }
                     }
                 }
                 LaunchedEffect(Unit) {
@@ -65,5 +77,7 @@ sealed class Screen (val route:String){
     object Login : Screen("login")
     object Home : Screen("home")
     object AddList : Screen("add_list")
+    object ListItems : Screen("list_items/{listId}")
 }
+
 

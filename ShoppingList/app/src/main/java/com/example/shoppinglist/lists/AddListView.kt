@@ -1,16 +1,14 @@
-package com.example.shoppinglist
+package com.example.shoppinglist.lists
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,9 +20,9 @@ import com.example.shoppinglist.ui.theme.ShoppingListTheme
 fun AddListView(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController()
-) {
+){
 
-    val viewModel: AddListViewModel = viewModel()
+    val viewModel : AddListViewModel = viewModel()
     val state = viewModel.state.value
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -38,35 +36,23 @@ fun AddListView(
             value = state.name,
             onValueChange = viewModel::onNameChange
         )
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            placeholder = {
-                Text("add item quantity")
-            },
-            value = state.quantity.toString(),
-            onValueChange = viewModel::onQuantityChange
-        )
-
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             onClick = {
                 viewModel.addList()
-                viewModel.onCheckChange(false)
                 navController.popBackStack()
             }) {
             Text("add")
         }
     }
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun AddListViewPreview() {
+fun AddListViewPreview(){
     ShoppingListTheme {
         AddListView()
     }
