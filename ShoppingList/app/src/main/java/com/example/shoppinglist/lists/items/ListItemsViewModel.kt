@@ -51,8 +51,7 @@ class ListItemsViewModel : ViewModel(){
 
     fun toggleItemChecked(listId: String, item: Item){
         val db = Firebase.firestore
-        
-        item.checked = !item.checked
+
 
         db.collection("lists")
             .document(listId)
@@ -62,5 +61,12 @@ class ListItemsViewModel : ViewModel(){
 
     }
 
+    fun addItem(listId: String, item: Item){
+        val db = Firebase.firestore
+        db.collection("lists")
+            .document(listId)
+            .collection("items")
+            .add(item)
+    }
 
 }

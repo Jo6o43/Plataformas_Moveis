@@ -16,8 +16,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.example.shoppinglist.lists.AddListView
 import com.example.shoppinglist.lists.ListListsView
+import com.example.shoppinglist.lists.items.AddItemView
 import com.example.shoppinglist.lists.items.ListItemsView
 import com.example.shoppinglist.login.LoginView
+import com.example.shoppinglist.login.RegistView
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 const val TAG = "ShoppingList"
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                         navController = navController,
                         startDestination = Screen.Login.route
-                    ){
+                    ) {
                         composable(Screen.Login.route) {
                             LoginView(
                                 modifier = Modifier.padding(innerPadding),
@@ -44,12 +46,19 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        composable(Screen.Regist.route) {
+                            RegistView(
+                                modifier = Modifier.padding(innerPadding),
+                                onRegistSuccess = {
+                                    navController.navigate(Screen.Regist.route)
+                                })
+                        }
                         composable(Screen.Home.route) {
                             ListListsView(
                                 navController = navController
                             )
                         }
-                        composable (Screen.AddList.route){
+                        composable(Screen.AddList.route) {
                             AddListView(navController = navController)
                         }
                         composable(Screen.ListItems.route) {
@@ -59,25 +68,31 @@ class MainActivity : ComponentActivity() {
                                 listId = listId ?: ""
                             )
                         }
+                        composable(Screen.AddItem.route) {
+                            AddItemView(navController = navController)
+                        }
                     }
-                }
-                LaunchedEffect(Unit) {
-                    val auth = Firebase.auth
-                    val currentUser = auth.currentUser
-                    if (currentUser != null){
-                        navController.navigate(Screen.Home.route)
+
+                    LaunchedEffect(Unit) {
+                        val auth = Firebase.auth
+                        val currentUser = auth.currentUser
+                        if (currentUser != null) {
+                            navController.navigate(Screen.Home.route)
+                        }
                     }
                 }
             }
         }
     }
-}
 
-sealed class Screen (val route:String){
-    object Login : Screen("login")
-    object Home : Screen("home")
-    object AddList : Screen("add_list")
-    object ListItems : Screen("list_items/{listId}")
+    sealed class Screen(val route: String) {
+        object Login : Screen("login")
+        object Regist : Screen("regist")
+        object Home : Screen("home")
+        object AddList : Screen("add_list")
+        object ListItems : Screen("list_items/{listId}")
+        object AddItem : Screen("add_item/{listId}")
+    }
 }
 
 

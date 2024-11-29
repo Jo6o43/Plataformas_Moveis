@@ -21,22 +21,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.shoppinglist.MainActivity
 import com.example.shoppinglist.R
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
 fun ListItemsView(
     modifier: Modifier = Modifier,
-    listId : String,
+    listId: String,
     navController: NavController = rememberNavController()
-                  ){
+) {
 
-    val viewModel : ListItemsViewModel = viewModel()
+    val viewModel: ListItemsViewModel = viewModel()
     val state = viewModel.state.value
 
 
-    Box(modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
 
         LazyColumn(modifier = modifier.fillMaxSize()) {
             itemsIndexed(
@@ -58,7 +61,7 @@ fun ListItemsView(
                 .padding(16.dp)
                 .size(64.dp),
             onClick = {
-
+                navController.navigate(MainActivity.Screen.AddItem.route)
             }) {
             Image(
                 modifier = Modifier
@@ -71,7 +74,7 @@ fun ListItemsView(
         }
     }
 
-    LaunchedEffect (key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getItems(listId)
     }
 
@@ -79,7 +82,7 @@ fun ListItemsView(
 
 @Preview(showBackground = true)
 @Composable
-fun ListItemsViewPreview(){
+fun ListItemsViewPreview() {
     ShoppingListTheme {
         ListItemsView(listId = "")
     }

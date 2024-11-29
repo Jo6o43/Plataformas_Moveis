@@ -27,11 +27,6 @@ fun ItemRomView(
             modifier = Modifier
                 .padding(16.dp),
             text = item.qtd.toString()?:"")
-        Checkbox(
-            checked =item.checked,
-            onCheckedChange = {onCheckedChange()}
-        )
-
     }
 
 }
@@ -44,7 +39,6 @@ fun ItemRomViewPreview(){
             docId = "",
             name = "Lápis",
             qtd = 2.0,
-            checked = false
         )
         )
     }

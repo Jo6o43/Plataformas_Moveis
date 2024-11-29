@@ -1,10 +1,10 @@
 package com.example.shoppinglist.models
 
-class Item (
-    var docId : String?,
-    var name : String?,
-    var qtd : Double?,
-    var checked : Boolean = false) {
+class Item(
+    var docId: String?,
+    var name: String?,
+    var qtd: Double?,
+) {
 
-    constructor() : this(null,null,null, false)
+    constructor() : this(null, null, null)
 }

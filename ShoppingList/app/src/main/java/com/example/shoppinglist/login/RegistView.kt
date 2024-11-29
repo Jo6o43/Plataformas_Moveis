@@ -15,15 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
-fun LoginView(
+fun RegistView(
     modifier: Modifier = Modifier,
-    onLoginSuccess: () -> Unit = {},
-    navController: NavController = rememberNavController()
+    onRegistSuccess: () -> Unit = {}
 ) {
 
     val viewModel: LoginViewModel = viewModel()
@@ -58,34 +55,33 @@ fun LoginView(
             Button(
                 onClick = {
                     viewModel.onLoginClick {
-                        onLoginSuccess()
+                        onRegistSuccess()
                     }
                 },
                 content = {
-                    Text("Login")
+                    Text("Registro")
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { navController.navigate("regist") },
-                content = {
-                    Text("Regist")
-                }
-            )
+//            Spacer(modifier = Modifier.height(16.dp))
+//            Button(
+//                onClick = { navController.navigate("login") },
+//                content = {
+//                    Text("Back to login")
+//                }
+//            )
             Spacer(modifier = Modifier.height(16.dp))
             if (state.error != null)
                 Text(state.error ?: "")
             if (state.isLoading)
                 CircularProgressIndicator()
-
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginViewPreview() {
+fun RegistViewPreview() {
     ShoppingListTheme {
-        LoginView()
+        RegistView()
     }
 }

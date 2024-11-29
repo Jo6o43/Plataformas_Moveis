@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.shoppinglist.MainActivity
 import com.example.shoppinglist.R
-import com.example.shoppinglist.Screen
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
@@ -54,7 +54,7 @@ fun ListListsView(
                         .padding(16.dp)
                         .clickable {
                             navController.navigate(
-                                Screen.ListItems.route.replace("{listId}", item.docId!!)
+                                MainActivity.Screen.ListItems.route.replace("{listId}", item.docId!!)
                             )
                         },
                     text = item.name ?: ""
@@ -67,7 +67,7 @@ fun ListListsView(
                 .padding(16.dp)
                 .size(64.dp),
             onClick = {
-                navController.navigate(Screen.AddList.route)
+                navController.navigate(MainActivity.Screen.AddList.route)
             }) {
             Image(
                 modifier = Modifier
