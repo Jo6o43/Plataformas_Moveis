@@ -2,6 +2,7 @@ package com.example.shoppinglist.lists.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -55,25 +56,43 @@ fun ListItemsView(
                 }
             }
         }
-
-        Button(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(64.dp),
-            onClick = {
-                navController.navigate(MainActivity.Screen.AddItem.route)
-            }) {
-            Image(
+        Row() {
+            Button(
                 modifier = Modifier
-                    .scale(2.0f)
+                    .padding(16.dp)
                     .size(64.dp),
-                colorFilter = ColorFilter.tint(Color.White),
-                painter = painterResource(R.drawable.add_new_list),
-                contentDescription = "add"
-            )
+                onClick = {
+                    //delete this list
+                    navController.navigate(MainActivity.Screen.Home)
+                }) {
+                Image(
+                    modifier = Modifier
+                        .scale(2.0f)
+                        .size(64.dp),
+                    colorFilter = ColorFilter.tint(Color.White),
+                    painter = painterResource(R.drawable.delete),
+                    contentDescription = "Delete List"
+                )
+            }
+            Button(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(64.dp),
+                onClick = {
+                    navController.navigate(MainActivity.Screen.AddItem.route)
+                }) {
+                Image(
+                    modifier = Modifier
+                        .scale(2.0f)
+                        .size(64.dp),
+                    colorFilter = ColorFilter.tint(Color.White),
+                    painter = painterResource(R.drawable.add_new_item),
+                    contentDescription = "addItem"
+                )
+            }
         }
-    }
 
+    }
     LaunchedEffect(key1 = true) {
         viewModel.getItems(listId)
     }

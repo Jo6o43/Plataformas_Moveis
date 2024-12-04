@@ -75,7 +75,7 @@ fun ListListsView(
                     .size(64.dp),
                 colorFilter = ColorFilter.tint(Color.White),
                 painter = painterResource(R.drawable.add_new_list),
-                contentDescription = "add"
+                contentDescription = "addList"
             )
         }
     }

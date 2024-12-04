@@ -41,16 +41,18 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Login.route) {
                             LoginView(
                                 modifier = Modifier.padding(innerPadding),
+                                navController = navController,
                                 onLoginSuccess = {
                                     navController.navigate(Screen.Home.route)
                                 }
                             )
                         }
-                        composable(Screen.Regist.route) {
+                        composable(Screen.Register.route) {
                             RegistView(
                                 modifier = Modifier.padding(innerPadding),
+                                navController = navController,
                                 onRegistSuccess = {
-                                    navController.navigate(Screen.Regist.route)
+                                    navController.navigate(Screen.Register.route)
                                 })
                         }
                         composable(Screen.Home.route) {
@@ -64,12 +66,17 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.ListItems.route) {
                             val listId = it.arguments?.getString("listId")
                             ListItemsView(
+                                navController = navController,
                                 modifier = Modifier.padding(innerPadding),
                                 listId = listId ?: ""
                             )
                         }
                         composable(Screen.AddItem.route) {
-                            AddItemView(navController = navController)
+                            val itemId = it.arguments?.getString("itemId")
+                            AddItemView(navController = navController,
+                                modifier = Modifier.padding(innerPadding),
+                                //itemId = itemId?: ""
+                            )
                         }
                     }
 
@@ -87,7 +94,7 @@ class MainActivity : ComponentActivity() {
 
     sealed class Screen(val route: String) {
         object Login : Screen("login")
-        object Regist : Screen("regist")
+        object Register : Screen("register")
         object Home : Screen("home")
         object AddList : Screen("add_list")
         object ListItems : Screen("list_items/{listId}")
