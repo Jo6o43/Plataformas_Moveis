@@ -32,38 +32,36 @@ fun ListItemsView(
     listId: String,
     navController: NavController = rememberNavController()
 ) {
-
     val viewModel: ListItemsViewModel = viewModel()
     val state = viewModel.state.value
-
 
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-
         LazyColumn(modifier = modifier.fillMaxSize()) {
             itemsIndexed(
                 items = state.items
             ) { index, item ->
-
-                ItemRomView(item = item) {
-                    viewModel
-                        .toggleItemChecked(
-                            listId = listId,
-                            item = item
-                        )
+                ItemRowView(item = item) {
+                    viewModel.toggleItemChecked(listId = listId, item = item)
                 }
             }
         }
-        Row() {
+        Row {
             Button(
                 modifier = Modifier
                     .padding(16.dp)
                     .size(64.dp),
                 onClick = {
-                    //delete this list
-                    navController.navigate(MainActivity.Screen.Home)
+                    viewModel.deleteList(listId,
+                        onSuccess = {
+                            navController.navigate(MainActivity.Screen.Home.route)
+                        },
+                        onFailure = { e ->
+                            // Handle the error, e.g., show a toast or log the error
+                        }
+                    )
                 }) {
                 Image(
                     modifier = Modifier
@@ -79,7 +77,7 @@ fun ListItemsView(
                     .padding(16.dp)
                     .size(64.dp),
                 onClick = {
-                    navController.navigate(MainActivity.Screen.AddItem.route)
+                    navController.navigate(MainActivity.Screen.AddItem.route.replace("{listId}", listId))
                 }) {
                 Image(
                     modifier = Modifier
@@ -87,18 +85,15 @@ fun ListItemsView(
                         .size(64.dp),
                     colorFilter = ColorFilter.tint(Color.White),
                     painter = painterResource(R.drawable.add_new_item),
-                    contentDescription = "addItem"
+                    contentDescription = "Add Item"
                 )
             }
         }
-
     }
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = listId) {
         viewModel.getItems(listId)
     }
-
 }
-
 @Preview(showBackground = true)
 @Composable
 fun ListItemsViewPreview() {

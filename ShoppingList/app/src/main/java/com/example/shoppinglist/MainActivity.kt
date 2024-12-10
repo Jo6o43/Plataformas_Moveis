@@ -72,10 +72,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Screen.AddItem.route) {
-                            val itemId = it.arguments?.getString("itemId")
-                            AddItemView(navController = navController,
+                            val listId = it.arguments?.getString("listId")
+                            AddItemView(
+                                navController = navController,
                                 modifier = Modifier.padding(innerPadding),
-                                //itemId = itemId?: ""
+                                listId = listId ?: ""
                             )
                         }
                     }

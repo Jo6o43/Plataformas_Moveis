@@ -19,7 +19,8 @@ import com.example.shoppinglist.ui.theme.ShoppingListTheme
 @Composable
 fun AddItemView(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController()
+    navController: NavController = rememberNavController(),
+    listId: String
 ) {
     val viewModel: AddItemViewModel = viewModel()
     val state = viewModel.state.value
@@ -44,7 +45,12 @@ fun AddItemView(
             },
             value = state.quantity.toString(),
             onValueChange = {
-                viewModel.onQuantityChange(it.toInt())
+                val quantity = it.toIntOrNull()
+                if (quantity != null) {
+                    viewModel.onQuantityChange(quantity)
+                } else {
+                    viewModel.onQuantityChange(0) // Default to 0 if input is invalid
+                }
             }
         )
         Button(
@@ -52,19 +58,18 @@ fun AddItemView(
                 .fillMaxWidth()
                 .padding(16.dp),
             onClick = {
-                viewModel.addItem()
+                viewModel.addItem(listId)
                 navController.popBackStack()
             }) {
             Text("add")
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AddItemViewPreview() {
     ShoppingListTheme {
-        AddItemView()
+        AddItemView(listId = "")
     }
 }

@@ -14,21 +14,19 @@ data class ListItemsState(
     val error: String? = null
 )
 
-class ListItemsViewModel : ViewModel(){
+class ListItemsViewModel : ViewModel() {
 
     var state = mutableStateOf(ListItemsState())
         private set
 
-
-    fun getItems(listId : String){
-
+    fun getItems(listId: String) {
         val db = Firebase.firestore
 
         db.collection("lists")
             .document(listId)
             .collection("items")
-            .addSnapshotListener{ value, error->
-                if (error!=null){
+            .addSnapshotListener { value, error ->
+                if (error != null) {
                     state.value = state.value.copy(
                         error = error.message
                     )
@@ -37,7 +35,6 @@ class ListItemsViewModel : ViewModel(){
 
                 val items = arrayListOf<Item>()
                 for (document in value?.documents!!) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
                     val item = document.toObject(Item::class.java)
                     item?.docId = document.id
                     items.add(item!!)
@@ -46,22 +43,19 @@ class ListItemsViewModel : ViewModel(){
                     items = items
                 )
             }
-
     }
 
-    fun toggleItemChecked(listId: String, item: Item){
+    fun toggleItemChecked(listId: String, item: Item) {
         val db = Firebase.firestore
-
 
         db.collection("lists")
             .document(listId)
             .collection("items")
             .document(item.docId!!)
             .set(item)
-
     }
 
-    fun addItem(listId: String, item: Item){
+    fun addItem(listId: String, item: Item) {
         val db = Firebase.firestore
         db.collection("lists")
             .document(listId)
@@ -69,4 +63,34 @@ class ListItemsViewModel : ViewModel(){
             .add(item)
     }
 
+    fun deleteList(listId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("lists")
+            .document(listId)
+            .collection("items")
+            .get()
+            .addOnSuccessListener { items ->
+                val batch = db.batch()
+                for (item in items.documents) {
+                    batch.delete(item.reference)
+                }
+                batch.commit().addOnSuccessListener {
+                    db.collection("lists")
+                        .document(listId)
+                        .delete()
+                        .addOnSuccessListener {
+                            onSuccess()
+                        }
+                        .addOnFailureListener { e ->
+                            onFailure(e)
+                        }
+                }.addOnFailureListener { e ->
+                    onFailure(e)
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
 }

@@ -12,30 +12,27 @@ import com.example.shoppinglist.models.Item
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
-fun ItemRomView(
+fun ItemRowView(
     modifier: Modifier = Modifier,
-    item : Item,
-    onCheckedChange : ()->Unit = {}
-){
-    Row {
+    item: Item,
+    onCheckedChange: () -> Unit = {}
+) {
+    Row(modifier = modifier.padding(16.dp)) {
         Text(
-            modifier = Modifier
-                .padding(16.dp).weight(1f),
-            text = item.name?:"")
-
+            modifier = Modifier.weight(1f),
+            text = item.name ?: ""
+        )
         Text(
-            modifier = Modifier
-                .padding(16.dp),
-            text = item.qtd.toString()?:"")
+            modifier = Modifier.padding(start = 16.dp),
+            text = item.qtd?.toInt()?.toString() ?: "0"
+        )
     }
-
 }
-
 @Preview(showBackground = true)
 @Composable
 fun ItemRomViewPreview(){
     ShoppingListTheme {
-        ItemRomView(item = Item(
+        ItemRowView(item = Item(
             docId = "",
             name = "Lápis",
             qtd = 2.0,

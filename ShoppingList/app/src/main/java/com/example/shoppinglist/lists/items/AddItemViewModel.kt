@@ -29,7 +29,7 @@ class AddItemViewModel : ViewModel() {
         state.value = state.value.copy(quantity = quantity)
     }
 
-    fun addItem() {
+    fun addItem(listId: String) {
         val db = Firebase.firestore
         val auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -41,7 +41,9 @@ class AddItemViewModel : ViewModel() {
             state.value.quantity.toDouble()
         )
 
-        db.collection("items")
+        db.collection("lists")
+            .document(listId)
+            .collection("items")
             .add(addItem)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
