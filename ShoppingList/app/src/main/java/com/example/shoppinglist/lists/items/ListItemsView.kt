@@ -59,7 +59,6 @@ fun ListItemsView(
                             navController.navigate(MainActivity.Screen.Home.route)
                         },
                         onFailure = { e ->
-                            // Handle the error, e.g., show a toast or log the error
                         }
                     )
                 }) {

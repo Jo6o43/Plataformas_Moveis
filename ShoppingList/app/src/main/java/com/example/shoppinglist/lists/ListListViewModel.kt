@@ -29,7 +29,6 @@ class ListListsViewModel : ViewModel() {
         val userId = currentUser?.uid
 
         db.collection("lists")
-            //.whereEqualTo("capital", true)
             .get()
             .addOnSuccessListener { documents ->
                 val listItemsList = arrayListOf<ListItems>()

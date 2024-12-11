@@ -37,12 +37,10 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 state.value = state.value.copy(isLoading = false)
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     val user = auth.currentUser
                     onLoginSuccess()
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     state.value =
                         state.value.copy(error = task.exception?.message ?: "Unknown error")
@@ -59,12 +57,10 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 state.value = state.value.copy(isLoading = false)
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     val user = auth.currentUser
                     onRegistSuccess()
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     state.value =
                         state.value.copy(error = task.exception?.message ?: "Unknown error")

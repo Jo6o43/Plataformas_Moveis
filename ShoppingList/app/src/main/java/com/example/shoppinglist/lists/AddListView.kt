@@ -1,5 +1,6 @@
 package com.example.shoppinglist.lists
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,8 @@ fun AddListView(
     val viewModel : AddListViewModel = viewModel()
     val state = viewModel.state.value
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
