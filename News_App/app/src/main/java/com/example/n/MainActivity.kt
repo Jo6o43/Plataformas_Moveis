@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,18 +25,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.n.theme.TopNewsTheme
 import com.example.n.ui.ArticleDetail
-//import com.example.n.ui.BottomNavigationBar
+import com.example.n.ui.FavList.FavoriteListScreen
+import com.example.n.ui.FavList.FavoriteViewModel
+import com.example.n.ui.FavList.NewsItem
 import com.example.n.ui.HomeView
 import com.example.n.ui.ProfileScreen
 import com.example.n.ui.SearchScreen
@@ -52,7 +53,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TopNewsTheme {
-                var navController = rememberNavController()
+                val navController = rememberNavController()
+                val favoriteViewModel: FavoriteViewModel by viewModels()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
@@ -65,11 +70,10 @@ class MainActivity : ComponentActivity() {
                                 Text("Awesome News")
                             },
                             navigationIcon = {
-                                IconButton(onClick = { /*todo*/ }) {
+                                IconButton(onClick = { navController.navigate(Screen.Home.route) }) {
                                     Icon(Icons.Filled.Home, contentDescription = "Home")
                                 }
                             }
-
                         )
                     },
                     bottomBar = {
@@ -81,23 +85,6 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-
-
-                                IconButton(
-                                    onClick = {Screen.Search.route},
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.List,
-                                        contentDescription = "News"
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { /*todo*/ },
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(Icons.Filled.Share, contentDescription = "Share")
-                                }
                                 IconButton(
                                     onClick = { navController.popBackStack() },
                                     modifier = Modifier.weight(1f)
@@ -108,17 +95,28 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 IconButton(
-                                    onClick = { /*todo*/ },
+                                    onClick = { navController.navigate(Screen.Favorite.route) },
                                     modifier = Modifier.weight(1f)
                                 ) {
                                     Icon(
-                                        Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = "GoNext"
+                                        Icons.AutoMirrored.Filled.List,
+                                        contentDescription = "FavList"
                                     )
                                 }
                                 var isLiked by remember { mutableStateOf(false) }
                                 IconButton(
-                                    onClick = { isLiked = !isLiked
+                                    onClick = {
+                                        if (currentRoute != Screen.Home.route) {
+                                            val newsItem = NewsItem("1", "Sample News")
+                                            if (!isLiked) {
+                                                favoriteViewModel.addFavorite(newsItem)
+                                                isLiked = true
+                                            } else {
+                                                // Optionally, you can implement a removeFavorite function
+                                                // favoriteViewModel.removeFavorite(newsItem)
+                                                isLiked = false
+                                            }
+                                        }
                                     },
                                     modifier = Modifier.weight(1f)
                                 ) {
@@ -127,12 +125,6 @@ class MainActivity : ComponentActivity() {
                                     } else {
                                         Icon(Icons.Filled.FavoriteBorder, contentDescription = "Like")
                                     }
-                                }
-                                IconButton(
-                                    onClick = { /*todo*/ },
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(Icons.Filled.Refresh, contentDescription = "Refresh")
                                 }
                             }
                         }
@@ -148,8 +140,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(innerPadding)
                             )
                         }
-                        composable(route = Screen.ArticleDetail.route)
-                        {
+                        composable(route = Screen.ArticleDetail.route) {
                             val url = it.arguments?.getString("articleUrl")
                             ArticleDetail(
                                 modifier = Modifier.padding(innerPadding),
@@ -162,18 +153,28 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.Profile.route) {
                             ProfileScreen()
                         }
+                        composable(route = Screen.Favorite.route) {
+                            FavoriteListScreen(favoriteViewModel = favoriteViewModel)
+                        }
                     }
-
                 }
             }
         }
     }
 }
 
-sealed class Screen(val route: String,) {
+sealed class Screen(val route: String) {
     object Home : Screen("home")
     object ArticleDetail : Screen("article_Detail/{articleUrl}")
     object Search : Screen("search")
     object Profile : Screen("profile")
+    object Favorite : Screen("favorite")
 }
 
+@Preview
+@Composable
+fun DefaultPreview() {
+    TopNewsTheme {
+        HomeView()
+    }
+}
